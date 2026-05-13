@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { Redis } from "@upstash/redis";
 
 export const runtime = "nodejs";
 
@@ -13,13 +12,6 @@ function normalize(s: string) {
 
 function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-}
-
-function getRedis(): Redis | null {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!url || !token) return null;
-  return new Redis({ url, token });
 }
 
 export async function POST(req: Request) {
@@ -56,19 +48,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Palavra-chave 2 incorreta", field: "chave2" }, { status: 422 });
   }
 
-  const emailKey = `cert:submitted:${email.trim().toLowerCase()}`;
-  const redis = getRedis();
-
-  if (redis) {
-    const reserved = await redis.set(emailKey, "1", { nx: true });
-    if (reserved !== "OK") {
-      return NextResponse.json(
-        { ok: false, error: "Este e-mail já solicitou o certificado.", code: "ALREADY_SUBMITTED" },
-        { status: 409 },
-      );
-    }
-  }
-
   const params = new URLSearchParams({
     nome: nome.trim(),
     email: email.trim(),
@@ -82,7 +61,6 @@ export async function POST(req: Request) {
       headers: { Accept: "application/json" },
     });
     if (!res.ok) {
-      if (redis) await redis.del(emailKey);
       return NextResponse.json(
         { ok: false, error: `Webhook returned ${res.status}` },
         { status: 502 },
@@ -90,7 +68,6 @@ export async function POST(req: Request) {
     }
   } catch (err) {
     console.error("Webhook error:", err);
-    if (redis) await redis.del(emailKey);
     return NextResponse.json({ ok: false, error: "Webhook request failed" }, { status: 502 });
   }
 

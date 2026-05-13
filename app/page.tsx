@@ -1,8 +1,6 @@
 ﻿"use client";
 
-import { useEffect, useRef, useState } from "react";
-
-const LS_KEY = "cert_submitted_v1";
+import { useRef, useState } from "react";
 
 type FieldState = "neutral" | "valid" | "error";
 
@@ -31,13 +29,6 @@ export default function Page() {
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [alreadySubmitted, setAlreadySubmitted] = useState(false);
-
-  useEffect(() => {
-    try {
-      if (localStorage.getItem(LS_KEY) === "1") setAlreadySubmitted(true);
-    } catch {}
-  }, []);
 
   const [toast, setToast] = useState<{ show: boolean; type: "success" | "error" | "warning"; msg: string }>({
     show: false,
@@ -123,14 +114,8 @@ export default function Page() {
       };
 
       if (res.ok && data.ok) {
-        try { localStorage.setItem(LS_KEY, "1"); } catch {}
         setSuccess(true);
         showToast("Dados enviados com sucesso! 🎉", "success");
-      } else if (res.status === 409) {
-        try { localStorage.setItem(LS_KEY, "1"); } catch {}
-        setAlreadySubmitted(true);
-        showToast("Este e-mail já solicitou o certificado.", "error");
-        setLoading(false);
       } else if (res.status === 422 && data.field) {
         const msg = "Palavra-chave incorreta — volte às aulas 😉";
         if (data.field === "chave1") setChave1State({ s: "error", m: msg });
@@ -185,17 +170,7 @@ export default function Page() {
         </div>
 
         <div className="card">
-          {alreadySubmitted ? (
-            <div className="success-overlay show">
-              <div className="success-icon-wrap">✅</div>
-              <h2>Você já enviou</h2>
-              <p>
-                Este formulário só pode ser preenchido uma vez.
-                <br />
-                Se você ainda não recebeu o certificado, aguarde alguns minutos.
-              </p>
-            </div>
-          ) : success ? (
+          {success ? (
             <div className="success-overlay show">
               <div className="success-icon-wrap">🎉</div>
               <h2>Certificado solicitado!</h2>
