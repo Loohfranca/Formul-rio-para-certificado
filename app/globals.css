@@ -129,16 +129,56 @@ body::after {
   font-weight: 600;
 }
 
-.header p.instructor {
-  margin: 4px 0 14px;
-  font-size: 14px;
-  color: var(--text-secondary);
-  letter-spacing: 0.02em;
+.instructor {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px auto 18px;
+  padding: 6px 14px 6px 6px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  box-shadow: var(--shadow-sm);
 }
 
-.header p.instructor strong {
-  color: var(--primary);
+.instructor-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: #fff;
+  font-size: 12px;
   font-weight: 700;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+}
+
+.instructor-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.1;
+  text-align: left;
+}
+
+.instructor-prefix {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.instructor-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+  margin-top: 1px;
 }
 
 .card {
