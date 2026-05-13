@@ -172,6 +172,9 @@ export default function Page() {
             Masterclass —<br />
             <span>Claude Builders</span>
           </h1>
+          <p className="instructor">
+            por <strong>Victor Vicente</strong>
+          </p>
           <p>
             Para receber seu certificado, preencha as <strong>informações abaixo</strong>:
           </p>
