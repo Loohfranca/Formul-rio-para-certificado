@@ -175,7 +175,7 @@ export default function Page() {
           <div className="instructor">
             <span className="instructor-avatar">VV</span>
             <span className="instructor-label">
-              <span className="instructor-prefix">Instrutor</span>
+              <span className="instructor-prefix">Professor</span>
               <span className="instructor-name">Victor Vicente</span>
             </span>
           </div>
